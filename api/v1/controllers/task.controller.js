@@ -6,13 +6,20 @@ module.exports.index = async (req, res) => {
     deleted: false,
   };
 
-  // Bộ lọc
+  // Filter
   if (req.query.status) {
     find.status = req.query.status;
   }
-  // Hết Bộ lọc
+  // Hết Filter
 
-  const tasks = await Task.find(find);
+  // Sort
+  const sort = {};
+  if (req.query.sortKey && req.query.sortValue) {
+    sort[req.query.sortKey] = req.query.sortValue;
+  }
+  // End Sort
+
+  const tasks = await Task.find(find).sort(sort);
 
   res.json(tasks);
 };
